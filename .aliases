@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Reload .bashrc
+alias reload="source ~/.bashrc"
+
+# sudo
+alias fucking=sudo
+alias please=sudo
+
+# Easier navigation: .., ..., ...., ....., ~ and -
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias -- -="cd -"
+
+# Always enable colored `grep` output
+alias grep='grep --color=auto '
+
+# Get week number
+alias week='date +%V'
+
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+# IP addresses
+alias ips="sudo ifconfig -a | grep -o 'inet6\\? \\(addr:\\)\\?\\s\\?\\(\\(\\([0-9]\\+\\.\\)\\{3\\}[0-9]\\+\\)\\|[a-fA-F0-9:]\\+\\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+# View HTTP traffic
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\\: .*|GET \\/.*\""
+
+# move to trash
+alias trash="gio trash"
+
+# remove file interactive
+alias rm='rm -i'
+
+# copy file interactive
+alias cp='cp -i'
+
+# move file interactive
+alias mv='mv -i'
+
+# untar
+alias untar='tar xvf'
+
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/id_ed25519.pub | xclip -selection clipboard | echo '=> Public key copied to pasteboard.'"
+
+# Pipe my private key to my clipboard.
+alias prikey="more ~/.ssh/id_ed25519 | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"
+
+# eza
+alias ls="eza --color=always"
+alias ll="eza -lF --color=always --icons=always"
+alias la="eza -laF --color=always --icons=always"
+
+# tldr
+alias tldr="tldr -t 'ocean'"
+
+# weather
+alias weather="curl wttr.in"
+
+# fzf
+alias fzf="fzf --preview \"bat --color=always --style=numbers --line-range=:500 {}\""
+
+# RustScan
+alias rustscan='podman run -it --rm --name rustscan rustscan/rustscan:latest'

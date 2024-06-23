@@ -1,0 +1,173 @@
+#!/bin/bash
+
+# `o` with no arguments opens the current directory, otherwise opens the given
+# location
+open() {
+	if [ $# -eq 0 ]; then
+		xdg-open .	> /dev/null 2>&1
+	else
+		xdg-open "$@" > /dev/null 2>&1
+	fi
+}
+
+# Create a new directory and enter it
+mkd() {
+	mkdir -p "$@"
+	cd "$@" || exit
+}
+
+
+# Call from a local repo to open the repository on github/gitlab in browser
+remote_repo() {
+	# Figure out github repo base URL
+	local base_url
+	base_url=$(git config --get remote.origin.url)
+	base_url=${base_url%\.git} # remove .git from end of string
+
+	# Fix git@github.com: URLs
+	base_url=${base_url//git@github\.com:/https:\/\/github\.com\/}
+
+	# Fix git://github.com URLS
+	base_url=${base_url//git:\/\/github\.com/https:\/\/github\.com\/}
+
+	# Fix git@bitbucket.org: URLs
+	base_url=${base_url//git@bitbucket.org:/https:\/\/bitbucket\.org\/}
+
+	# Fix git@gitlab.com: URLs
+	base_url=${base_url//git@gitlab\.com:/https:\/\/gitlab\.com\/}
+
+	# Validate that this folder is a git folder
+	if ! git branch 2>/dev/null 1>&2 ; then
+		echo "Not a git repo!"
+		exit $?
+	fi
+
+	# Find current directory relative to .git parent
+	full_path=$(pwd)
+	git_base_path=$(cd "./$(git rev-parse --show-cdup)" || exit 1; pwd)
+	relative_path=${full_path#$git_base_path} # remove leading git_base_path from working directory
+
+	# If filename argument is present, append it
+	if [ "$1" ]; then
+		relative_path="$relative_path/$1"
+	fi
+
+	# Figure out current git branch
+	# git_where=$(command git symbolic-ref -q HEAD || command git name-rev --name-only --no-undefined --always HEAD) 2>/dev/null
+	git_where=$(command git name-rev --name-only --no-undefined --always HEAD) 2>/dev/null
+
+	# Remove cruft from branchname
+	branch=${git_where#refs\/heads\/}
+	branch=${branch#remotes\/origin\/}
+
+	[[ $base_url == *bitbucket* ]] && tree="src" || tree="tree"
+	url="$base_url/$tree/$branch$relative_path"
+
+
+	echo "Calling $(type open) for $url"
+
+	open "$url" &> /dev/null || (echo "Using $(type open) to open URL failed." && exit 1);
+}
+
+# extract file(s) from compressed status
+extract() {
+    local opt
+    local OPTIND=1
+    while getopts "hv" opt; do
+        case "$opt" in
+            h)
+                cat <<End-Of-Usage
+Usage: ${FUNCNAME[0]} [option] <archives>
+    options:
+        -h  show this message and exit
+        -v  verbosely list files processed
+End-Of-Usage
+                return
+                ;;
+            v)
+                local -r verbose='v'
+                ;;
+            ?)
+                extract -h >&2
+                return 1
+                ;;
+        esac
+    done
+    shift $((OPTIND-1))
+
+    [ $# -eq 0 ] && extract -h && return 1
+    while [ $# -gt 0 ]; do
+        if [[ ! -f "$1" ]]; then
+            echo "extract: '$1' is not a valid file" >&2
+            shift
+            continue
+        fi
+
+        local -r filename=$(basename -- $1)
+        local -r filedirname=$(dirname -- $1)
+        local targetdirname=$(sed 's/\(\.tar\.bz2$\|\.tbz$\|\.tbz2$\|\.tar\.gz$\|\.tgz$\|\.tar$\|\.tar\.xz$\|\.txz$\|\.tar\.Z$\|\.7z$\|\.nupkg$\|\.zip$\|\.war$\|\.jar$\)//g' <<< $filename)
+        if [ "$filename" = "$targetdirname" ]; then
+            # archive type either not supported or it doesn't need dir creation
+            targetdirname=""
+        else
+            mkdir -v "$filedirname/$targetdirname"
+        fi
+
+        if [ -f "$1" ]; then
+            case "$1" in
+                *.tar.bz2|*.tbz|*.tbz2) tar "x${verbose}jf" "$1" -C "$filedirname/$targetdirname" ;;
+                *.tar.gz|*.tgz) tar "x${verbose}zf" "$1" -C "$filedirname/$targetdirname" ;;
+                *.tar.xz|*.txz) tar "x${verbose}Jf" "$1" -C "$filedirname/$targetdirname" ;;
+                *.tar.Z) tar "x${verbose}Zf" "$1" -C "$filedirname/$targetdirname" ;;
+                *.bz2) bunzip2 "$1" ;;
+                *.deb) dpkg-deb -x${verbose} "$1" "${1:0:-4}" ;;
+                *.pax.gz) gunzip "$1"; set -- "$@" "${1:0:-3}" ;;
+                *.gz) gunzip "$1" ;;
+                *.pax) pax -r -f "$1" ;;
+                *.pkg) pkgutil --expand "$1" "${1:0:-4}" ;;
+                *.rar) unrar x "$1" ;;
+                *.rpm) rpm2cpio "$1" | cpio -idm${verbose} ;;
+                *.tar) tar "x${verbose}f" "$1" -C "$filedirname/$targetdirname" ;;
+                *.xz) xz --decompress "$1" ;;
+                *.zip|*.war|*.jar|*.nupkg) unzip "$1" -d "$filedirname/$targetdirname" ;;
+                *.Z) uncompress "$1" ;;
+                *.7z) 7za x -o"$filedirname/$targetdirname" "$1" ;;
+                *) echo "'$1' cannot be extracted via extract" >&2;;
+            esac
+        fi
+
+        shift
+    done
+}
+
+#JetBrains
+#
+# Open the IDEs without blocking the current terminal session
+readonly TOOLBOX_DIR=~/.local/share/JetBrains/Toolbox/scripts
+idea () {
+	${TOOLBOX_DIR}/idea $1 > /dev/null & 1
+}
+
+pycharm () {
+	${TOOLBOX_DIR}/pycharm $1 > /dev/null & 1
+}
+
+webstorm () {
+	${TOOLBOX_DIR}/webstorm $1 > /dev/null & 1
+}
+
+goland () {
+	${TOOLBOX_DIR}/goland $1 > /dev/null & 1
+}
+
+studio () {
+	${TOOLBOX_DIR}/studio $1 > /dev/null & 1
+}
+
+datagrip () {
+	${TOOLBOX_DIR}/datagrip $1 > /dev/null & 1
+}
+
+fleet_ () {
+	${TOOLBOX_DIR}/fleet $1 > /dev/null & 1
+}

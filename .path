@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# update path
+export PATH=/usr/local/bin:${PATH}:/sbin:/usr/local/sbin
+
+# add go path
+export PATH="/usr/local/go/bin:${PATH}"
+
+# JetBrains IDEs
+# replaced with functions (which also launch the IDEs without blockign the terminal window)
+#export PATH=":~/.local/share/JetBrains/Toolbox/scripts:${PATH}"
+
+# Flutter
+export PATH="${PATH}:~/.local/share/flutter/bin"
+
+export CDPATH=".:$HOME:${HOME}/Downloads:${HOME}/Projects"
+
+# Node Version Manager
+export NVM_DIR="$HOME/.nvm"
+
+# A multi-shell completion library.
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+
+# Java/JVM Software Development Manager
+export SDKMAN_DIR="$HOME/.sdkman"

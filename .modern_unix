@@ -1,0 +1,36 @@
+#!/bin/bash
+
+declare -A commands
+
+# Manually populate the associative array with commands and descriptions
+commands=(
+    ["bat"]="A cat clone with syntax highlighting and Git integration"
+    ["eza"]="A modern, maintained replacement for ls, built on exa"
+    ["duf"]="Disk Usage/Free Utility - a better 'df' alternative"
+    ["fzf"]="A general purpose command-line fuzzy finder"
+    ["tldr"]="📚 Collaborative cheatsheets for console commands"
+    ["bottom [btm]"]="Yet another cross-platform graphical process/system monitor"
+    ["procs"]="A modern replacement for ps written in Rust"
+    ["httpie [http]"]="HTTPie is a command-line HTTP client"
+    ["has"]="checks presence of various command line tools and their versions"
+    ["pipes.sh"]="Animated pipes terminal screensaver"
+    ["ripgrep [rg]"]="ripgrep recursively searches (directories) for a regex pattern"
+    ["sd"]="sd is an intuitive find & replace CLI"
+    ["rustscan"]="Modern Port Scanner"
+    ["glow"]="Render markdown on the CLI"
+    ["fkill"]="Fabulously kill processes. Cross-platform" # rewrite faster in go ?
+    ["taze [npx taze]"]="A modern cli tool that keeps your npm deps fresh"
+    # Add more commands and descriptions here
+)
+
+tools=(
+    ["dooit"]="An awesome TUI todo manager"
+)
+
+cmds() {
+    printf "%-20s %s\n" "Command" "Description"
+    printf "%-20s %s\n" "-------" "-----------"
+    for cmd in "${!commands[@]}"; do
+        printf "%-20s %s\n" "$cmd" "${commands[$cmd]}"
+    done
+}
