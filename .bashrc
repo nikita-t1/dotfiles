@@ -77,8 +77,14 @@ eval "$(thefuck --alias)"
 # fzf is a general-purpose command-line fuzzy finder.
 eval "$(fzf --bash)"
 
+# Starship 
+eval "$(starship init bash)"
+
 # A multi-shell completion library.
 source <(carapace _carapace)
 
 # Java/JVM Software Development Manager
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+#neofetch
+minifetch

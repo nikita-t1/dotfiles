@@ -8,4 +8,6 @@ rsync --mkpath -a  ~/.modern_unix ./.modern_unix
 rsync --mkpath -a  ~/.path ./.path
 rsync --mkpath -a  ~/.profile ./.profile
 
+rsync --mkpath -a ~/.config/fastfetch ./.config
+
 echo "DONE"
