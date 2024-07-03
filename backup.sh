@@ -9,5 +9,6 @@ rsync --mkpath -a  ~/.path ./.path
 rsync --mkpath -a  ~/.profile ./.profile
 
 rsync --mkpath -a ~/.config/fastfetch ./.config
+rsync --mkpath -a ~/.config/starship.toml ./.config/starship.toml
 
 echo "DONE"
