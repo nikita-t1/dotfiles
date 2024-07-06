@@ -68,6 +68,7 @@ unset file
 	grep -v "[?*]" | cut -d " " -f2 | \
 	tr ' ' '\n')" scp sftp ssh
 
+
 # zoxide is a smarter cd command, inspired by z and autojump.
 eval "$(zoxide init bash --cmd cd)"
 
@@ -85,6 +86,23 @@ source <(carapace _carapace)
 
 # Java/JVM Software Development Manager
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# git repository greeter
+last_repository=
+check_directory_for_new_repository() {
+	current_repository=$(git rev-parse --show-toplevel 2> /dev/null)
+	
+	if [ "$current_repository" ] && \
+	   [ "$current_repository" != "$last_repository" ]; then
+		onefetch
+	fi
+	last_repository=$current_repository
+}
+cd() {
+	builtin cd "$@"
+	check_directory_for_new_repository
+}
+
 
 #neofetch
 minifetch

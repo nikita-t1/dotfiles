@@ -71,3 +71,6 @@ alias rustscan='podman run -it --rm --name rustscan rustscan/rustscan:latest'
 # fastfetch
 alias megafetch='fastfetch --config ~/.config/fastfetch/megafetch.jsonc'
 alias minifetch='fastfetch --config ~/.config/fastfetch/minifetch.jsonc'
+
+#onefetch
+alias onefetch="onefetch --no-color-palette --number-of-authors 5"
