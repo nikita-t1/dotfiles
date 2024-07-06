@@ -27,6 +27,7 @@
             "showPeCoreCount": true,
             "temp": true
         },
+        "cpucache",
         {
             "type": "gpu",
             "temp": true
@@ -45,6 +46,11 @@
 //               "format": "{#1}{#keys}├───────────────────────────────────────────────────────────────────────────┤",
              "type": "custom"
         },
+//                {
+//            "key": " OS",
+//            "type": "os"
+//        },
+
         "os",
         "bios",
         "kernel",
@@ -84,7 +90,6 @@
         "loadavg",
         "processes",
         //"terminaltheme",
-        "cpucache",
         "cpuusage",
         "publicip",
         {
