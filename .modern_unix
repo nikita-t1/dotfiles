@@ -14,6 +14,7 @@ commands=(
     ["httpie [http]"]="HTTPie is a command-line HTTP client"
     ["has"]="checks presence of various command line tools and their versions"
     ["pipes.sh"]="Animated pipes terminal screensaver"
+    ["cbonsai"]="bonsai tree generator"
     ["ripgrep [rg]"]="ripgrep recursively searches (directories) for a regex pattern"
     ["sd"]="sd is an intuitive find & replace CLI"
     ["rustscan"]="Modern Port Scanner"
