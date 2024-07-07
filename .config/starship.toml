@@ -48,6 +48,8 @@ format = 'took [$duration](bold yellow)'
 [direnv]
 disabled = false
 
+[directory]
+read_only = ' 󰏮 '
 #[directory.substitutions]
 #"Documents" = "󰈙 "
 #"Downloads" = " "
