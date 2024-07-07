@@ -145,29 +145,29 @@ End-Of-Usage
 # Open the IDEs without blocking the current terminal session
 readonly TOOLBOX_DIR=~/.local/share/JetBrains/Toolbox/scripts
 idea () {
-	${TOOLBOX_DIR}/idea $1 > /dev/null & 1
+	${TOOLBOX_DIR}/idea $1 > /dev/null 2>&1 &
 }
 
 pycharm () {
-	${TOOLBOX_DIR}/pycharm $1 > /dev/null & 1
+	${TOOLBOX_DIR}/pycharm $1 > /dev/null 2>&1 &
 }
 
 webstorm () {
-	${TOOLBOX_DIR}/webstorm $1 > /dev/null & 1
+	${TOOLBOX_DIR}/webstorm $1 > /dev/null 2>&1 &
 }
 
 goland () {
-	${TOOLBOX_DIR}/goland $1 > /dev/null & 1
+	${TOOLBOX_DIR}/goland $1 > /dev/null 2>&1 &
 }
 
 studio () {
-	${TOOLBOX_DIR}/studio $1 > /dev/null & 1
+	${TOOLBOX_DIR}/studio $1 > /dev/null 2>&1 &
 }
 
 datagrip () {
-	${TOOLBOX_DIR}/datagrip $1 > /dev/null & 1
+	${TOOLBOX_DIR}/datagrip $1 > /dev/null 2>&1 &
 }
 
 fleet_ () {
-	${TOOLBOX_DIR}/fleet $1 > /dev/null & 1
+	${TOOLBOX_DIR}/fleet $1 > /dev/null 2>&1 &
 }
